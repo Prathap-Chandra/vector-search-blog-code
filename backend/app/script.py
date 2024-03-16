@@ -35,18 +35,17 @@ def create_image_embeddings(images_directory):
             image_path = os.path.join(images_directory, file)
         
             embeddings = get_image_embeddings(image_path)
-            if embeddings is not None:
-                point_id = get_uuid() 
-                if isinstance(embeddings, list) and all(isinstance(item, float) for item in embeddings):
-                    points = [
-                        PointStruct(id=point_id, vector=embeddings, payload={"image_path": image_path, "image_name": image_name})
-                    ]
-                    operation_info = qdrant.insert_points(collection_name=collection_mapping["ImageSearchCollection"], points=points)
-                    print(operation_info)
-                else:
-                    raise ValueError(f"Embeddings format error for image: {image_name}. Expected a list of floats.")
-            else:
+            if embeddings is None:
                 raise ValueError(f"Embeddings extraction failed for image: {image_name}. Skipping to the next image.")
+            point_id = get_uuid() 
+            if isinstance(embeddings, list) and all(isinstance(item, float) for item in embeddings):
+                points = [
+                    PointStruct(id=point_id, vector=embeddings, payload={"image_path": image_path, "image_name": image_name})
+                ]
+                operation_info = qdrant.insert_points(collection_name=collection_mapping["ImageSearchCollection"], points=points)
+                print(operation_info)
+            else:
+                raise ValueError(f"Embeddings format error for image: {image_name}. Expected a list of floats.")
     except FileNotFoundError as e:
         raise FileNotFoundError(f"Error occurred while reading the image directory: {str(e)}")
 
@@ -61,18 +60,19 @@ def create_pdf_embeddings(pdfs_directory):
             pdfChunks = get_pdf_chunks(pdf_path)
             for chunk in pdfChunks:
                 embeddings = get_text_embeddings(chunk)
-                if embeddings is not None:
-                    point_id = get_uuid() 
-                    if isinstance(embeddings, list) and all(isinstance(item, float) for item in embeddings):
-                        points = [
-                            PointStruct(id=point_id, vector=embeddings, payload={ "content": chunk, "pdf_name": pdf_name })
-                        ]
-                        operation_info = qdrant.insert_points(collection_name=collection_mapping['PDFChatCollection'], points=points)
-                        print(operation_info)
-                    else:
-                        raise ValueError(f"Embeddings format error for pdf: {pdf_name}. Expected a list of floats.")
-                else:
+                if embeddings is None:
                     raise ValueError(f"Embeddings extraction failed for pdf: {pdf_name}. Skipping to the next pdf.")
+                
+                point_id = get_uuid() 
+                if isinstance(embeddings, list) and all(isinstance(item, float) for item in embeddings):
+                    points = [
+                        PointStruct(id=point_id, vector=embeddings, payload={ "content": chunk, "pdf_name": pdf_name })
+                    ]
+                    operation_info = qdrant.insert_points(collection_name=collection_mapping['PDFChatCollection'], points=points)
+                    print(operation_info)
+                else:
+                    raise ValueError(f"Embeddings format error for pdf: {pdf_name}. Expected a list of floats.")
+                    
     except FileNotFoundError as e:
         raise FileNotFoundError(f"Error occurred while reading the pdf directory: {str(e)}")    
 

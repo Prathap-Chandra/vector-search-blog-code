@@ -3,7 +3,7 @@ import json
 import os
 from dotenv import load_dotenv
 from transformers import ViTImageProcessor, ViTModel
-from config import vision_transformer_models_config, pdf_chunk_size, VISION_TRANSFORMER_MODEL
+from .config import vision_transformer_models_config, pdf_chunk_size, VISION_TRANSFORMER_MODEL
 from PIL import Image
 import hashlib
 import uuid
@@ -17,10 +17,6 @@ OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 
 feature_extractor = ViTImageProcessor.from_pretrained(VISION_TRANSFORMER_MODEL)
 model = ViTModel.from_pretrained(VISION_TRANSFORMER_MODEL)
-
-# Function to get unique id for an image file
-def get_unique_id(image_file):
-    return int(hashlib.sha256(image_file.encode('utf-8')).hexdigest(), 16) % (10 ** 8)  # Reduce to 8 digits
 
 def get_uuid():
     return str(uuid.uuid4())
@@ -86,33 +82,39 @@ def get_text_embeddings(text):
             raise ValueError(f"An error occurred while fetching embeddings: {e}")
     
 def prettifyVectorResultsWithLLM(prompt):
-    url = 'https://api.openai.com/v1/chat/completions'
+    url = "https://api.openai.com/v1/chat/completions"
+
+    payload = {
+        "model": "gpt-3.5-turbo",
+        "messages": [
+            {
+                "role": "system",
+                "content": "You are a helpful assistant."
+            },
+            {
+                "role": "user",
+                "content": prompt
+            }
+        ]
+    }
     headers = {
         'Content-Type': 'application/json',
         'Authorization': f'Bearer {OPENAI_API_KEY}',
     }
 
-    payload = json.dumps({
-        "model": "gpt-3.5-turbo",
-        "messages": [{
-            "role": "system",
-            "content": "Given some context and a prompt/question, I want you to generate a response accordinhly. For example, Context: Christopher Nolan directed Interstellat which was released in 2014. Question: Who directed Interstellar? Answer: Christopher Nolan directed Interstellar"
-        }, {
-            "role": "user",
-            "content": prompt
-        }],
-        "temperature": 1,
-        "max_tokens": 256,
-        "top_p": 1,
-        "frequency_penalty": 0,
-        "presence_penalty": 0
-    })
-
     try:
-        response = requests.post("POST", url, headers=headers, json=payload)
+        response = requests.post(url, headers=headers, json=payload)
         response.raise_for_status()
-        embeddings = response.json()
-        return embeddings
+        formatted_response = response.json()
+
+        answer = ""
+        try:
+            answer = formatted_response['choices'][0]['message']['content']
+            print(formatted_response['choices'][0])
+        except (KeyError, IndexError, TypeError) as e:
+            raise ValueError(f"An error occurred while processing the response: {str(e)}")
+
+        return answer
     except requests.exceptions.RequestException as e:
         raise ValueError(f"An error occurred while fetching embeddings: {e}")    
     

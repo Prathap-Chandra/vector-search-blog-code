@@ -22,6 +22,8 @@ collection_mapping = {
 
 max_top_query_results = 5
 
+file_upload_max_size = 2097152 # 2 MB
+
 pdf_chunk_size = 500
 
 allowed_image_extensions = ['png', 'jpg', 'jpeg']

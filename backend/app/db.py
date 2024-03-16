@@ -1,7 +1,7 @@
 from qdrant_client import QdrantClient
 from qdrant_client.http.models import VectorParams, Distance
 from qdrant_client.http.exceptions import ResponseHandlingException
-from config import max_top_query_results
+from .config import max_top_query_results
 
 class QdrantDB:
     def __init__(self):

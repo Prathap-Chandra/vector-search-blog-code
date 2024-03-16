@@ -1,9 +1,9 @@
 from flask import request
-from .service import chat_with_your_pdf, upload_your_pdf, search_visually_similar_images
+from .service import chat_with_your_pdf, upload_your_pdf, search_visually_similar_images, generate_image_from_text
 
 def init_routes(app):
 
-    @app.route('/conversation', methods=['POST'])
+    @app.route('/conversation')
     def conversations():
         return chat_with_your_pdf(request)
     
@@ -17,7 +17,7 @@ def init_routes(app):
 
     @app.route('/images/generate', methods=['POST'])
     def generate_images_from_text_prompt():
-        return generate_image_from_text_service(request)
+        return generate_image_from_text(request)
 
     @app.route('/test', methods=['POST'])
     def test():
