@@ -24,21 +24,16 @@ def generate_image_from_text(request):
         image_unique_id = get_uuid()
         image_filename = f"{image_unique_id}.png"
 
-        # Define the directory to save images
-        image_directory = "user-generated-images"
-        
-        # Check if the directory exists, and if not, create it
+        image_directory = "user-generated-images"        
         if not os.path.exists(image_directory):
             os.makedirs(image_directory)
 
-        # current_directory = os.path.dirname(os.path.abspath(__file__))
-        # image_directory = os.path.join(current_directory, 'user-generated-images')
         image_path = os.path.join(image_directory, image_filename)
         absolute_image_path = os.path.abspath(image_path)
 
         print('absolute_image_path')
         print(absolute_image_path)
-        image.save(absolute_image_path)  # Save the image
+        image.save(absolute_image_path)
         return jsonify({
             'image_path': image_path,
             'absolute_image_path': absolute_image_path,

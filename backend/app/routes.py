@@ -4,19 +4,19 @@ from .service import chat_with_your_pdf, upload_your_pdf, search_visually_simila
 def init_routes(app):
 
     @app.route('/conversation')
-    def conversations():
+    def get_conversations():
         return chat_with_your_pdf(request)
     
     @app.route('/conversation/attachment', methods=['POST'])
-    def attachements_in_conversations():
+    def handle_attachements_in_conversations():
         return upload_your_pdf(request)    
 
     @app.route('/images/similar', methods=['POST'])
-    def search_similar_images():
+    def retrieve_similar_images():
         return search_visually_similar_images(request)
 
     @app.route('/images/generate', methods=['POST'])
-    def generate_images_from_text_prompt():
+    def generate_images():
         return generate_image_from_text(request)
 
     @app.route('/test', methods=['POST'])
