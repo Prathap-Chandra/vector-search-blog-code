@@ -29,19 +29,21 @@ function ImageGeneration() {
       setShowLoader(true);
       setDisableSubmitButton(true);
 
+      console.log(prompt);
+
       const response = await apiRequest(`${BASE_URL}/images/generate`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({ prompt })
+        body: { 'image-description': prompt },
+        json: true,
       });
 
-      
       await new Promise((resolve) => setTimeout(resolve, 5000)); // Add a 5-second delay
 
-      if (response && response.imageUrl) {
-        setSelectedImage(response.imageUrl);
+      if (response && response.image_url) {
+        setSelectedImage(response.image_url);
       } else {
         setError("An error occurred while generating the image. Please try again.");
       }
@@ -56,8 +58,8 @@ function ImageGeneration() {
   };
 
   return (
-    <div className="bg-slate-600 rounded-2xl p-5 m-5 flex flex-col items-center justify-center">
-      <p className="text-xl pb-3">Generating an image might take anywhere between 2 to 10 mins depending.</p>
+    <div className=" rounded-2xl p-5 m-5 flex flex-col items-center justify-center">
+      <p className="text-xl pb-3">Generating an image might take anywhere between 2 to 10 mins depending on your hardware.</p>
       {showLoader ? (
         <Loader />
       ) : (
