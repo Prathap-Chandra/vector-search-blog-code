@@ -20,7 +20,9 @@ collection_mapping = {
     "ImageSearchCollection": "image-search",
 }
 
-max_top_query_results = 5
+BASE_URL = "http://localhost:5000"
+
+max_top_query_results = 2
 
 file_upload_max_size = 2097152 # 2 MB
 

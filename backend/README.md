@@ -45,3 +45,8 @@ curl --location 'https://api.openai.com/v1/chat/completions' \
     ]
   }'
 ```
+
+# Curl to get images
+```
+curl --location 'http://localhost:5000/images?image_name=7dbe6660-9471-4ac9-b738-3970f2704c87.png&image_type=text-based'
+```
