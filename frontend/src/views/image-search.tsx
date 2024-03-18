@@ -13,7 +13,7 @@ import { Loader } from "../components/custom/loader";
 
 const ImageSearch: React.FC = () => {
   const [loader] = useState(true);
-  
+
   const [images] = useState([
     "https://cdnph.upi.com/collection/fp/upi/13204/84e9840e6836c43d1721d0cc45b4ff8b/Liam-Neeson-turns-70-a-look-back_16_1.jpg",
     "https://cdnph.upi.com/collection/fp/upi/13204/84e9840e6836c43d1721d0cc45b4ff8b/Liam-Neeson-turns-70-a-look-back_16_1.jpg",
@@ -60,7 +60,7 @@ const ImageSearch: React.FC = () => {
   };
 
   return (
-    <div className="bg-slate-600 rounded-2xl p-5 m-5 flex flex-col items-center justify-center">
+    <div className="rounded-2xl p-5 m-5 flex flex-col items-center justify-center">
       <p className="p-5 text-2xl">Upload an image to view similar images</p>
       {selectedImage && (
         <img
@@ -75,14 +75,14 @@ const ImageSearch: React.FC = () => {
         type="file"
         onChange={handleImageUpload}
       />
-      <Separator className=" bg-black mt-5" />
+      <Separator className="bg-black mt-5" />
       <p className="p-5 text-2xl">View similar images</p>
 
-      {loader && ( <Loader /> )} 
+      {/* {loader && <Loader />} */}
       <Carousel
         plugins={[Autoplay({ delay: 2000 })]}
         opts={{ align: "start", loop: true }}
-        className="w-full max-w-[420px] rounded-2xl"
+        className="w-full max-w-[500px] rounded-2xl"
       >
         <CarouselContent>
           {Array.from({ length: 5 }).map((_, index) => (
@@ -100,6 +100,53 @@ const ImageSearch: React.FC = () => {
       </Carousel>
     </div>
   );
+
+  // return (
+  //   <div className="flex flex-row items-center justify-center">
+  //     <div className="flex-1 m-5 p-5 items-center justify-center">
+  //       <p className="p-5 text-2xl">Upload an image to view similar images</p>
+  //       {selectedImage && (
+  //         <img
+  //           className="max-h-[500px] max-w-[500px] rounded-2xl"
+  //           src={selectedImage}
+  //           alt="Image"
+  //         />
+  //       )}
+  //       <Input
+  //         className="rounded-full w-1/2 cursor-pointer mt-5 text-center justify-center"
+  //         id="picture"
+  //         type="file"
+  //         onChange={handleImageUpload}
+  //       />
+  //     </div>
+  //     <Separator className="bg-black-900" orientation="vertical" />
+
+  //     <div className="flex-1 m-5 p-5 items-center justify-center" >
+  //       <p className="p-5 text-2xl">View similar images</p>
+
+  //       {/* {loader && <Loader />} */}
+  //       <Carousel
+  //         plugins={[Autoplay({ delay: 2000 })]}
+  //         opts={{ align: "start", loop: true }}
+  //         className="w-full max-w-[500px] rounded-2xl"
+  //       >
+  //         <CarouselContent>
+  //           {Array.from({ length: 5 }).map((_, index) => (
+  //             <CarouselItem key={index}>
+  //               <img
+  //                 className="rounded-2xl"
+  //                 src={images[index + 1]}
+  //                 alt="Image"
+  //               />
+  //             </CarouselItem>
+  //           ))}
+  //         </CarouselContent>
+  //         <CarouselPrevious />
+  //         <CarouselNext />
+  //       </Carousel>
+  //     </div>
+  //   </div>
+  // );
 };
 
 export default ImageSearch;

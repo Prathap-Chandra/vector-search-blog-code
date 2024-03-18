@@ -81,7 +81,7 @@ const PDFChat: React.FC = () => {
   }
 
   return (
-    <div className="bg-slate-600 rounded-2xl p-5 m-5 flex flex-col items-center align-middle justify-center">
+    <div className="rounded-2xl p-5 m-5 flex flex-col items-center align-middle justify-center">
       <div className="text-2xl">Upload a PDF to chat with it</div>
       <Separator className="bg-black mt-3 mb-3" />
       {items.map((_, index) => (

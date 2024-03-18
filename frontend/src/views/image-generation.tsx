@@ -66,7 +66,7 @@ function ImageGeneration() {
         <>
         {selectedImage && (
           <img
-            className="max-h-[680px] max-w-[900px] rounded-2xl"
+            className="max-h-[560px] max-w-[1000px] rounded-2xl"
             src={selectedImage}
             alt="Image"
           />
