@@ -40,8 +40,8 @@ function ImageGeneration() {
 
       await new Promise((resolve) => setTimeout(resolve, 5000)); // Add a 5-second delay
 
-      if (response && response.image_url) {
-        setSelectedImage(response.image_url);
+      if (response && (response as { image_url: string }).image_url) {
+        setSelectedImage((response as { image_url: string }).image_url);
       } else {
         setError("An error occurred while generating the image. Please try again.");
       }

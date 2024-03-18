@@ -6,8 +6,6 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
 } from "../components/ui/carousel";
 import { Loader } from "../components/custom/loader";
 import { tree, BASE_URL, allowedFileTypes, MAX_FILE_SIZE } from "../lib/constants";
@@ -17,7 +15,7 @@ const ImageSearch: React.FC = () => {
   const [message, setMessage] = useState("Please upload an image to view similar images here");
   const [showLoader, setShowLoader] = useState(false);
   const [disableUploadButton, setDisableUploadButton] = useState(false);
-  const [similarImages, setSimilarImages] = useState();
+  const [similarImages, setSimilarImages] = useState([] as string[]);
   const [selectedImage, setSelectedImage] = useState<string | null>(tree);
 
   const handleImageUpload = async (event: ChangeEvent<HTMLInputElement>) => {
@@ -106,14 +104,12 @@ const ImageSearch: React.FC = () => {
           className="w-full max-w-[500px] rounded-2xl"
         >
           <CarouselContent>
-            {similarImages.map((image: string, index: number) => (
+          {similarImages && similarImages.map((image: string, index: number) => (
               <CarouselItem key={index}>
                 <img className="rounded-2xl" src={image} alt="Image" />
               </CarouselItem>
             ))}
           </CarouselContent>
-          {/* <CarouselPrevious /> */}
-          {/* <CarouselNext /> */}
         </Carousel>
       )}
     </div>

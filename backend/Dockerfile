@@ -4,6 +4,7 @@ FROM python:3.9-slim
 # Set the working directory in the container
 WORKDIR /app
 
+# Copy the requirements file into the container at /app
 COPY requirements.txt /app
 
 # Install any needed packages specified in requirements.txt
@@ -16,8 +17,8 @@ COPY . /app
 EXPOSE 5000
 
 # Define environment variable to point to your main.py file
-ENV FLASK_APP=main.py
-ENV FLASK_RUN_HOST=0.0.0.0
-
+ENV FLASK_APP=run.py
+ENV FLASK_RUN_HOST=0.0.0.0       
+ 
 # Run main.py when the container launches
 CMD ["flask", "run"]
