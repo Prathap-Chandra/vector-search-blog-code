@@ -1,0 +1,35 @@
+version: '3.8'
+services:
+  backend:
+    container_name: backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8642:5000"
+    depends_on:
+      - qdrant
+
+  frontend:
+    container_name: frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "8641:80"
+
+  qdrant:
+    container_name: database
+    image: generall/qdrant
+    ports:
+      - "8643:6333"
+    volumes:
+      - qdrant_data:/data
+
+volumes:
+  qdrant_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/prathap/Desktop/Codebase/Personal/docker-volumes/qdrant_storage

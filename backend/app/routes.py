@@ -3,7 +3,7 @@ from .service import chat_with_your_pdf, upload_your_pdf, search_visually_simila
 
 def init_routes(app):
 
-    @app.route('/conversation')
+    @app.route('/conversation', methods=['POST'])
     def get_conversations():
         return chat_with_your_pdf(request)
     

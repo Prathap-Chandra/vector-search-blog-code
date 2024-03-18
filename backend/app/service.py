@@ -38,9 +38,7 @@ def send_image(image_type, image_name):
 
 def generate_image_from_text(request):
     try:
-        print("Request:", request.get_json())
         image_description = request.get_json().get('image-description')
-        print("Image description:", image_description)
         pipeline = DiffusionPipeline.from_pretrained(DIFFUSION_MODEL, torch_dtype=torch.float32)
         image = pipeline(image_description).images[0]
         image_unique_id = get_uuid()
@@ -147,7 +145,7 @@ def chat_with_your_pdf(request):
     qdrant_response = qdrant.search(
         collection_name=collection_mapping['PDFChatCollection'],
         query_vector=query_embeddings,
-        limit=6,
+        limit=2,
         with_payload=True
     )
     
@@ -166,6 +164,6 @@ def chat_with_your_pdf(request):
         prompt += result['payload']['content'] + "\n---\n"
     prompt += "Question: " + prompt + "\n---\n" + "Answer: "
 
-    formatted_results = prettifyVectorResultsWithLLM(prompt)
+    answer = prettifyVectorResultsWithLLM(prompt)
 
-    return jsonify({'message': 'Query successful', 'results': formatted_results}), 200
+    return jsonify({'message': 'Query successful', 'answer': answer}), 200

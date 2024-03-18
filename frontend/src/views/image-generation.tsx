@@ -29,8 +29,6 @@ function ImageGeneration() {
       setShowLoader(true);
       setDisableSubmitButton(true);
 
-      console.log(prompt);
-
       const response = await apiRequest(`${BASE_URL}/images/generate`, {
         method: "POST",
         headers: {
@@ -48,7 +46,6 @@ function ImageGeneration() {
         setError("An error occurred while generating the image. Please try again.");
       }
 
-      console.log(response);
     } catch (error) {
       setError("An error occurred while generating the image. Please try again.");
     }

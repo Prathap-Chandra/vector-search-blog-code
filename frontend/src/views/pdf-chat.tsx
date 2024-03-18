@@ -7,10 +7,16 @@ import { Label } from "../components/ui/label";
 import { MAX_FILE_SIZE, BASE_URL } from "../lib/constants";
 
 const PDFChat: React.FC = () => {
-  const items = Array.from({ length: 10 });
   const [userQuery, setUserQuery] = useState("");
   const [uploadError, setUploadError] = useState('');
   const [error, setError] = useState("");
+  const [disableButtons, setDisableButtons] = useState(false);
+  const [conversation, setConversation] = useState([
+    {
+      role: "Bot",
+      message: "Welcome! I'm a specialized chatbot here to assist you with content directly from your own PDFs. Simply upload any PDF document, and feel free to ask me questions based on the information within those files. Please note that my answers will be limited to the content of your uploaded PDFs. I'm ready whenever you are, so go ahead and upload a document to get started!",
+    }
+  ]);
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -52,39 +58,55 @@ const PDFChat: React.FC = () => {
       });
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
-    if (!userQuery || userQuery.trim() === "") {
+  
+    const trimmedQuery = userQuery.trim();
+  
+    if (!trimmedQuery) {
       setError("Please enter your query before submitting");
       return;
     }
-
-    setUserQuery("");
+  
     setError("");
-
-    fetch("http://localhost:5000/", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ prompt }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-      })
-      .catch((error) => {
-        // Handle any error that occurred during the API call
-        console.error(error);
+    setConversation(prevConversations => [...prevConversations, { role: "User", message: trimmedQuery }]);
+    setDisableButtons(true);
+  
+    try {
+      const response = await fetch(`${BASE_URL}/conversation`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ query: trimmedQuery }),
       });
-  }
+  
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+  
+      const data = await response.json();
+  
+      if (data.answer) {
+        setConversation(prevConversations => [...prevConversations, { role: "Bot", message: data.answer }]);
+      } else {
+        setError("No response from the server.");
+      }
+
+      setDisableButtons(false);
+    } catch (error) {
+      setError('An error occurred while processing your request. Please try again.');
+    } finally {
+      setUserQuery("");
+    }
+  };
+  
 
   return (
-    <div className="rounded-2xl p-5 m-5 flex flex-col items-center align-middle justify-center">
-      <div className="text-2xl">Upload a PDF to chat with it</div>
+    <div className="rounded-2xl p-5 m-5 flex flex-col float-start align-middle justify-center border-slate-900 border-l-pink-900">
+      <div className="text-2xl text-center">Upload a PDF to chat with it</div>
       <Separator className="bg-black mt-3 mb-3" />
-      {items.map((_, index) => (
+      {conversation.map((conversation, index) => (
         <React.Fragment key={index}>
           <div className="flex flex-row justify-start">
             <div className="max-w-1/2">
@@ -95,7 +117,7 @@ const PDFChat: React.FC = () => {
               />
             </div>
             <div className="max-w-1/2 pl-4">
-              Welcome! I'm a specialized chatbot here to assist you with content directly from your own PDFs. Simply upload any PDF document, and feel free to ask me questions based on the information within those files. Please note that my answers will be limited to the content of your uploaded PDFs. I'm ready whenever you are, so go ahead and upload a document to get started!
+              <span className="font-bold">{conversation.role}:</span> {conversation.message}
             </div>
           </div>
           <Separator className="bg-black mt-3 mb-3" />
@@ -109,16 +131,18 @@ const PDFChat: React.FC = () => {
           id="picture"
           type="file"
           onChange={handleFileUpload}
+          disabled={disableButtons}
         />
-        {uploadError && <p>{uploadError}</p>}
+        {uploadError && <p className="text-rose-600 pl-2 text-lg">{uploadError}</p>}
       </div>
       <Separator className="bg-black mt-3" />
-      
+
       <form
         onSubmit={handleSubmit}
         className="flex flex-row items-center justify-center align-middle w-full"
       >
         <Textarea
+        value={userQuery}
           onChange={(e) => setUserQuery(e.target.value)}
           className="w-full rounded-xl mt-5"
           placeholder="Enter your prompt here."
@@ -126,6 +150,7 @@ const PDFChat: React.FC = () => {
         <Button
           variant="outline"
           type="submit"
+          disabled={disableButtons}
           className="text-lg ml-4 mt-4 p-5 rounded-full"
         >
           Submit
