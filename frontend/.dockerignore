@@ -1,0 +1,21 @@
+# Ignore node_modules directory
+node_modules/
+
+# Ignore build output directory
+dist/
+
+# Ignore development files
+*.log
+*.env
+
+# Ignore editor-specific files
+.vscode/
+.idea/
+
+# Ignore version control files
+.git/
+.gitignore
+
+# Ignore package manager lock files
+yarn.lock
+package-lock.json

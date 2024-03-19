@@ -1,0 +1,21 @@
+# Ignore common Python files and directories
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+
+# Ignore virtual environment files
+venv/
+.venv/
+.env
+
+# Ignore development and debugging files
+.vscode/
+.idea/
+*.log
+
+# Ignore Docker-related files
+Dockerfile
+docker-compose.yml
+
+# Ignore any other files or directories specific to your project
