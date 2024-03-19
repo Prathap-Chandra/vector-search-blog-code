@@ -124,7 +124,6 @@ def upload_your_pdf(request):
             collection_name=collection_mapping['PDFChatCollection'],
             points=points
         )
-        print("Operation info:", operation_info)
     except Exception as e:
         return jsonify({'error': f"Error occurred while processing PDF: {str(e)}"}), 500
 

@@ -5,7 +5,7 @@ from .config import max_top_query_results
 
 class QdrantDB:
     def __init__(self):
-        self.client = QdrantClient(host="localhost", port=6333)
+        self.client = QdrantClient(host="localhost", port=8643)
     
     def insert_points(self, collection_name, points):
         try:

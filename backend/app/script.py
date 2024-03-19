@@ -43,7 +43,6 @@ def create_image_embeddings(images_directory):
                     PointStruct(id=point_id, vector=embeddings, payload={"image_path": image_path, "image_name": image_name})
                 ]
                 operation_info = qdrant.insert_points(collection_name=collection_mapping["ImageSearchCollection"], points=points)
-                print(operation_info)
             else:
                 raise ValueError(f"Embeddings format error for image: {image_name}. Expected a list of floats.")
     except FileNotFoundError as e:
@@ -69,7 +68,6 @@ def create_pdf_embeddings(pdfs_directory):
                         PointStruct(id=point_id, vector=embeddings, payload={ "content": chunk, "pdf_name": pdf_name })
                     ]
                     operation_info = qdrant.insert_points(collection_name=collection_mapping['PDFChatCollection'], points=points)
-                    print(operation_info)
                 else:
                     raise ValueError(f"Embeddings format error for pdf: {pdf_name}. Expected a list of floats.")
                     
