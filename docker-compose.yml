@@ -6,7 +6,7 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     ports:
-      - "8642:5000"
+      - "8642:8000"
     depends_on:
       - qdrant
 
