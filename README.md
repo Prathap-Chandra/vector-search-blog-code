@@ -18,7 +18,7 @@ To run this project, you need to have the following installed on your machine:
 
 ## Installation
 
-**Note:** Currently, due to some issues with the backend, I couldn't dockerize the project. Therefore, to run the project, please follow these steps:
+**Note:** Currently, due to some backend issues, I couldn't dockerize the project. Therefore, to run the project, please follow the steps below. Additionally, the dependency on OpenAI's APIs will soon be removed and replaced with open-source models like LLaMA-7B by Meta AI.
 
 1. Clone the repository:
     ```bash
