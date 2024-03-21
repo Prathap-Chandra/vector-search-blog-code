@@ -1,9 +1,9 @@
-from db import QdrantDB
+from .db import QdrantDB
 from dotenv import load_dotenv
 import os
-from utils import get_image_embeddings, get_text_embeddings, get_pdf_chunks, get_uuid
+from .utils import get_image_embeddings, get_text_embeddings, get_pdf_chunks, get_uuid
 from qdrant_client.http.models import PointStruct
-from config import vision_transformer_models_config, collection_mapping, VISION_TRANSFORMER_MODEL, OPENAI_TEXT_EMBEDDING_DIMENSIONS
+from .config import vision_transformer_models_config, collection_mapping, VISION_TRANSFORMER_MODEL, OPENAI_TEXT_EMBEDDING_DIMENSIONS
 
 load_dotenv()
 
@@ -21,9 +21,13 @@ pdfs_directory = os.path.join(seed_data_path, 'pdfs')
 
 images_directory = os.path.join(seed_data_path, 'images')
 
-qdrant.create_collection(collection_mapping['PDFChatCollection'], OPENAI_TEXT_EMBEDDING_DIMENSIONS)
+does_pdf_collection_exist = qdrant.does_collection_exist(collection_mapping['PDFChatCollection'])
+if does_pdf_collection_exist is False:
+    qdrant.create_collection(collection_mapping['PDFChatCollection'], OPENAI_TEXT_EMBEDDING_DIMENSIONS)
 
-qdrant.create_collection(collection_mapping['ImageSearchCollection'], VISION_TRANSFORMER_MODEL_DIMENSIONS)
+does_image_collection_exist = qdrant.does_collection_exist(collection_mapping['ImageSearchCollection'])
+if does_image_collection_exist is False:
+    qdrant.create_collection(collection_mapping['ImageSearchCollection'], VISION_TRANSFORMER_MODEL_DIMENSIONS)
 
 def create_image_embeddings(images_directory):
     try:
@@ -42,7 +46,7 @@ def create_image_embeddings(images_directory):
                 points = [
                     PointStruct(id=point_id, vector=embeddings, payload={"image_path": image_path, "image_name": image_name})
                 ]
-                operation_info = qdrant.insert_points(collection_name=collection_mapping["ImageSearchCollection"], points=points)
+                qdrant.insert_points(collection_name=collection_mapping["ImageSearchCollection"], points=points)
             else:
                 raise ValueError(f"Embeddings format error for image: {image_name}. Expected a list of floats.")
     except FileNotFoundError as e:
@@ -67,7 +71,7 @@ def create_pdf_embeddings(pdfs_directory):
                     points = [
                         PointStruct(id=point_id, vector=embeddings, payload={ "content": chunk, "pdf_name": pdf_name })
                     ]
-                    operation_info = qdrant.insert_points(collection_name=collection_mapping['PDFChatCollection'], points=points)
+                    qdrant.insert_points(collection_name=collection_mapping['PDFChatCollection'], points=points)
                 else:
                     raise ValueError(f"Embeddings format error for pdf: {pdf_name}. Expected a list of floats.")
                     

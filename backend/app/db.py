@@ -29,3 +29,9 @@ class QdrantDB:
             )
         except ResponseHandlingException as e:
             raise ResponseHandlingException(f"Error occurred during collection creation: {e}")
+        
+    def does_collection_exist(self, collection_name):
+        try:
+            return self.client.collection_exists(collection_name=collection_name)
+        except ResponseHandlingException as e:
+            raise ResponseHandlingException(f"Error occurred while checking if collection exists: {e}")
