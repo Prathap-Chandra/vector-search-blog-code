@@ -1,25 +1,28 @@
 version: '3.8'
 services:
-  backend:
-    container_name: backend
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    ports:
-      - "8642:8000"
-    depends_on:
-      - qdrant
+  # backend:
+  #   container_name: backend
+  #   build:
+  #     context: ./backend
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "8642:8000"
+  #   depends_on:
+  #     - qdrant
 
-  frontend:
-    container_name: frontend
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    ports:
-      - "8641:80"
+  # frontend:
+  #   container_name: frontend
+  #   build:
+  #     context: ./frontend
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "8641:80"
 
   qdrant:
     container_name: database
     image: qdrant/qdrant
     ports:
-      - "8643:6333"
+      - "6333:6333"
+    volumes:
+      - /home/prathap/Desktop/Codebase/Personal/docker-volumes/qdrant:/qdrant
+
