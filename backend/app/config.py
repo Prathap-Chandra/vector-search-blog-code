@@ -20,7 +20,7 @@ collection_mapping = {
     "ImageSearchCollection": "image-search",
 }
 
-BASE_URL = "http://localhost:8642"
+BASE_URL = "http://localhost:5000"
 
 max_top_query_results = 2
 
