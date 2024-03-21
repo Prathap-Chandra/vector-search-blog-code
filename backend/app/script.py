@@ -10,6 +10,8 @@ load_dotenv()
 qdrant = QdrantDB()
 
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
+if not OPENAI_API_KEY:
+    raise ValueError("Please set the OPENAI_API_KEY environment variable.")
 
 VISION_TRANSFORMER_MODEL_DIMENSIONS = vision_transformer_models_config[VISION_TRANSFORMER_MODEL]["dimensions"]
 

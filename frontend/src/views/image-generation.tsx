@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Button } from "../components/ui/button";
 import { Textarea } from "../components/ui/textarea";
 import { beach, BASE_URL } from "../lib/constants";
-import { apiRequest } from "../lib/utils";
 import { Loader } from "../components/custom/loader";
 
 function ImageGeneration() {
@@ -29,19 +28,17 @@ function ImageGeneration() {
       setShowLoader(true);
       setDisableSubmitButton(true);
 
-      const response = await apiRequest(`${BASE_URL}/images/generate`, {
+      const response = await fetch(`${BASE_URL}/images/generate`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
-        body: { 'image-description': prompt },
-        json: true,
+        body: JSON.stringify({ 'image-description': prompt }),
       });
 
-      await new Promise((resolve) => setTimeout(resolve, 5000)); // Add a 5-second delay
-
-      if (response && (response as { image_url: string }).image_url) {
-        setSelectedImage((response as { image_url: string }).image_url);
+      if (response.ok) {
+        const data = await response.json();
+        setSelectedImage(data.image_url);
       } else {
         setError("An error occurred while generating the image. Please try again.");
       }

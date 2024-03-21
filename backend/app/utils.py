@@ -14,6 +14,8 @@ import time
 load_dotenv()
 
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
+if not OPENAI_API_KEY:
+    raise ValueError("Please set the OPENAI_API_KEY environment variable.")
 
 feature_extractor = ViTImageProcessor.from_pretrained(VISION_TRANSFORMER_MODEL)
 model = ViTModel.from_pretrained(VISION_TRANSFORMER_MODEL)
@@ -56,7 +58,7 @@ def get_text_embeddings(text):
         'model': 'text-embedding-3-small'
     }
 
-    max_attempts = 5
+    max_attempts = 15
     for attempt in range(max_attempts):
         try:
             response = requests.post(url, headers=headers, json=data)
@@ -71,7 +73,7 @@ def get_text_embeddings(text):
         except requests.exceptions.HTTPError as e:
             if e.response.status_code == 429:
                 if attempt < max_attempts - 1:
-                    wait_time = (2 ** attempt) * 10
+                    wait_time = (2 ** attempt) * 20
                     print(f"Rate limit exceeded. Waiting {wait_time} seconds before retrying...")
                     time.sleep(wait_time)
                 else:
@@ -89,7 +91,7 @@ def prettifyVectorResultsWithLLM(prompt):
         "messages": [
             {
                 "role": "system",
-                "content": "You are a helpful assistant."
+                "content": "You are a helpful assistant. Given some context and a question i want you to answer the question based on the context provided. For example, Context: In the small town of Willow Creek, there was a hidden pond that the locals whispered about but rarely visited. It was said to be enchanted, surrounded by thickets of willows that swayed without wind. Ella, a curious girl of ten, decided she must see this pond for herself. Question: Which town did Ella live in? Answer: Willow Creek."
             },
             {
                 "role": "user",
@@ -101,6 +103,9 @@ def prettifyVectorResultsWithLLM(prompt):
         'Content-Type': 'application/json',
         'Authorization': f'Bearer {OPENAI_API_KEY}',
     }
+
+    print("payload just before making call:")
+    print(payload)
 
     try:
         response = requests.post(url, headers=headers, json=payload)

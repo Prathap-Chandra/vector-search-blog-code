@@ -6,4 +6,5 @@ export const tree = "https://raw.githubusercontent.com/Prathap-Chandra/vector-se
 
 export const pageNotFound = "https://httpstatusdogs.com/img/404.jpg"
 
+export const gptLogo = "https://seeklogo.com/images/C/chatgpt-logo-02AFA704B5-seeklogo.com.png"
 export const allowedFileTypes = ["image/jpeg", "image/png"];

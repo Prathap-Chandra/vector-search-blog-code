@@ -144,7 +144,7 @@ def chat_with_your_pdf(request):
     qdrant_response = qdrant.search(
         collection_name=collection_mapping['PDFChatCollection'],
         query_vector=query_embeddings,
-        limit=2,
+        limit=5,
         with_payload=True
     )
     
@@ -161,7 +161,7 @@ def chat_with_your_pdf(request):
     prompt = "Context:\n"
     for result in formatted_results:
         prompt += result['payload']['content'] + "\n---\n"
-    prompt += "Question: " + prompt + "\n---\n" + "Answer: "
+    prompt += "Question: " + query + "\n---\n" + "Answer: "
 
     answer = prettifyVectorResultsWithLLM(prompt)
 
