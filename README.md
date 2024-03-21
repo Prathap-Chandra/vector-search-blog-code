@@ -84,11 +84,14 @@ To run this project, you need to have the following installed on your machine:
 **Searching Visually Similar Images**
 - Open `http://localhost:5173/search-visually-similar-images` in your browser
 - Upload an image of your choice and wait for few seconds and you should be able to see the similar images
+![Image Search](https://raw.githubusercontent.com/Prathap-Chandra/vector-search-blog-code/master/assests/gifs/image-search.gif)
 
 **Chat With PDF**
 - Open `http://localhost:5173/chat-with-your-pdf` in your browser
 - Upload a pdf of your choice and wait for few seconds till its uploaded to qdrant. Once done shoot a question from that PDF and you should be able to see the corresponding answer
+![Chat With Your PDF](https://raw.githubusercontent.com/Prathap-Chandra/vector-search-blog-code/master/assests/gifs/PDF-Chat.gif)
 
 **Image generation from text prompt - Poor man's Dall-E and MidJourney**
 - Open `http://localhost:5173/generate-image-from-text-description` in your browser
 - Enter any text prompt like a man in a pool or a bird flying in sky etc., and see your imagination coming to life in the lowest image resolution possible.
+![Text To Image](https://raw.githubusercontent.com/Prathap-Chandra/vector-search-blog-code/master/assests/gifs/text-to-image.gif)
