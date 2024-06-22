@@ -1,8 +1,6 @@
 # Visual and Textual Search Engine with Qdrant and OpenAI
 This project demonstrates a sophisticated search engine that leverages vector databases and machine learning models to find visually similar images and extract information from PDFs. Utilizing Qdrant for storage and OpenAI for processing, it allows users to search images by visual similarity, interact with PDFs via chat, and generate images from text descriptions.
 
-A brief description of the project.
-
 ## Table of Contents
 
 - [Requirements](#requirements)
